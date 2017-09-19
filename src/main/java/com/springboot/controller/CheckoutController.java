@@ -82,7 +82,7 @@ public class CheckoutController {
 
         User user = (User) userObj;
 
-        //如果订单未添加商品则跳转到购物车页面。。
+        //如果订单未添加商品则跳转到购物车页面。。丧失的
         if(ordertime == null || ordertime == "") {
             response.setHeader("Content-type", "text/html;charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
