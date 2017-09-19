@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.mapper.UserCenterMapper">
+
+    <select id="findUserCenterById" resultMap="userCBI" >
+        select * from user u join user_info info
+        on u.user_id=info.user_info_id
+        and u.user_id=#{userId}
+    </select>
+    <resultMap id="userCBI" type="com.springboot.pojo.User" autoMapping="true">
+        <id column="user_id" property="userId"/>
+        <association property="userInfo" resultMap="infoRM" javaType="com.springboot.pojo.UserInfo"/>
+    </resultMap>
+    <resultMap id="infoRM" type="com.springboot.pojo.UserInfo" autoMapping="true">
+        <id column="user_info_id" property="userInfoId"></id>
+    </resultMap>
+
+
+
+</mapper>

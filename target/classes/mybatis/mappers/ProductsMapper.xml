@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.mapper.ProductsMapper">
+
+    <resultMap id="productRM" type="com.springboot.pojo.Products" autoMapping="true">
+        <id column="product_id" property="productId"></id>
+        <association property="category" javaType="com.springboot.pojo.Category">
+            <id column="cate_id" property="cateId"></id>
+            <result column="cate_name" property="cateName"></result>
+            <result column="product_num" property="productNum"></result>
+        </association>
+    </resultMap>
+
+    <!-- 查询全部商品 -->
+    <select id="findProductsList" resultMap="productRM">
+    select p.*,c.cate_name,c.product_num from products p left join category c on p.cate_id=c.cate_id
+    </select>
+    <!--根据id查询商品信息 -->
+    <select id="findProductsById" resultMap="productRM">
+    select p.*,c.cate_name,c.product_num from products p left join category c on p.cate_id=c.cate_id where product_id = #{productId}
+    </select>
+    <!-- 根据用户id查询用户的心愿单详情-->
+    <select id="findproductsListByUserId" resultMap="productRM">
+      select * from products p where p.product_id in(
+      select product_id from favour f where f.user_id=#{userId})
+
+    </select>
+    <!-- 搜索商品-->
+    <select id="findProductsSearch"  resultMap="productRM">
+    select * from products where product_name like #{s}
+    </select>
+    <!--按照产品分类进行筛选 -->
+    <select id="findProductsCategories" resultMap="productRM">
+    select * from products where cate_id=#{cateId}
+    </select>
+    <!-- 查询分类的名称-->
+    <select id="findCategoriesListList" resultType="com.springboot.pojo.Category">
+        select * from category
+    </select>
+    <!-- 根据商品id查找小图路径 -->
+    <select id="findImgurlList" resultType="String">
+    select image from products_images where product_id=#{productId}
+    </select>
+    <!--根据商品的价格查询商品 -->
+    <select id="findProductListOrderByMoney" resultMap="productRM">
+      select * from
+      (select p.*,c.cate_name,c.product_num from products p left join category c on p.cate_id=c.cate_id order by p.price ) p
+      where p.price between 100 and 400
+    </select>
+    <!-- 根据商品库存查询-->
+    <select id="findProductListOrderByNum" resultMap="productRM">
+        select * from
+      (select p.*,c.cate_name,c.product_num from products p left join category c on p.cate_id=c.cate_id order by p.price ) p
+      where p.pnum > 50
+
+    </select>
+    <!-- 按照价格升序序 -->
+    <select id="findproductsOrderPriceList" resultMap="productRM">
+        select p.*,c.cate_name,c.product_num from products p left join category c on p.cate_id=c.cate_id order by price
+        limit 0 , 9
+    </select>
+
+    <!-- 按照价格降序 -->
+    <select id="findproductsOrderPriceDescList" resultMap="productRM">
+        select p.*,c.cate_name,c.product_num from products p left join category c on p.cate_id=c.cate_id order by price desc
+        limit 0, 9
+    </select>
+
+    <!-- 根据订单销量进行排序-->
+    <select id="findProductsOrderByOrders" resultMap="productRM">
+        select * from
+        (select p.*,o.buynum from
+        products p
+        left join
+        orderitem o
+        on p.product_id = o.product_id) p order by buynum desc
+        limit 0, 9
+    </select>
+    <select id="findProductsOrderByTime" resultMap="productRM">
+        select * from
+        (select p.*,o.buynum from
+        products p
+        left join
+        orderitem o
+        on p.product_id = o.product_id) p order by createtime desc
+    </select>
+	
+	<select id="findProductsListByMinPriceAndMaxPrice"  resultMap="productRM">
+        select p.*,c.cate_name,c.product_num
+        from products p
+        left join category c
+        on p.cate_id=c.cate_id
+        where p.price &gt; #{minPrice} and p.price &lt; #{maxPrice}
+        limit 0,9
+    </select>
+
+    <select id="findProductsListByMinPriceAndMaxPriceCount"  resultType="int">
+        select count(*)
+        from products p
+        left join category c
+        on p.cate_id=c.cate_id
+        where p.price &gt; #{minPrice} and p.price &lt; #{maxPrice}
+        limit 0, 9
+    </select>
+
+    <select id="findProductsListByPage" resultMap="productRM">
+        select p.*,c.cate_name,c.product_num
+        from products p
+        left join category c
+        on p.cate_id=c.cate_id
+        limit ${page}, ${pageSize}
+    </select>
+
+    <select id="findProductCount" resultType="int">
+        select count(*) from products
+    </select>
+
+</mapper>

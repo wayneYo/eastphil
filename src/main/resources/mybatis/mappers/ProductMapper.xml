@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.mapper.ProductMapper">
+
+    <select id="findAllProduct" resultMap="prodRM">
+        select p.product_id,c.cate_name,p.price,p.product_name,p.pnum from
+            products p
+            left join
+            (select cate_id c_id,cate_name  from category )c
+                on p.cate_id = c.c_id
+    </select>
+
+    <resultMap id="prodRM" type="com.springboot.pojo.Products" autoMapping="true">
+        <id column="product_id" property="productId"></id>
+        <association property="category" javaType="com.springboot.pojo.Category" resultMap="cateRM"/>
+    </resultMap>
+    <resultMap id="cateRM" type="com.springboot.pojo.Category" autoMapping="true">
+        <id column="cate_id" property="cateId"></id>
+    </resultMap>
+
+    <insert id="saveAddProduct">
+        insert into products (product_id,cate_id,product_name,price,oldprice,
+		pnum,imgurl,description,presentation,state,createtime) values(
+			#{productId,jdbcType=VARCHAR},
+			#{category.cateId,jdbcType=VARCHAR},
+			#{productName,jdbcType=VARCHAR},
+			#{price,jdbcType=DOUBLE},
+			#{oldprice,jdbcType=DOUBLE},
+			#{pnum,jdbcType=INTEGER},
+			#{imgurl,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{presentation,jdbcType=VARCHAR},
+			#{state,jdbcType=INTEGER},
+			#{createTime,jdbcType=DATE}
+		)
+    </insert>
+    <update id="saveUpdateProduct">
+        update products
+        <set>
+            product_id = #{productId},
+            cate_id = #{category.cateId},
+            product_name = #{productName},
+            price = #{price},
+            oldprice = #{oldprice},
+            pnum = #{pnum},
+            imgurl = #{imgurl},
+            description = #{description},
+            presentation = #{presentation},
+            state = #{state},
+            createtime = #{createTime}
+        </set>
+        where product_id = #{productId}
+    </update>
+
+    <delete id="deleteByProductId">
+        delete from products where product_id = #{productId}
+    </delete>
+
+    <select id="findProductById" resultType="com.springboot.pojo.Products">
+        select *  from products where product_id = #{productId}
+    </select>
+    <select id="findOhundredNum" resultType="int">
+        select sum(o.buynum) from
+        products p
+        left join
+        (select buynum,product_id o_id from orderitem o)o
+        on p.product_id=o.o_id
+        where p.price between 100 and 200
+    </select>
+    <select id="findThundredNum" resultType="int">
+        select sum(o.buynum) from
+        products p
+        left join
+        (select buynum,product_id o_id from orderitem o)o
+        on p.product_id=o.o_id
+        where p.price between 200 and 300
+    </select>
+    <select id="findTHhundredNum" resultType="int">
+        select sum(o.buynum) from
+        products p
+        left join
+        (select buynum,product_id o_id from orderitem o)o
+        on p.product_id=o.o_id
+        where p.price between 300 and 400
+    </select>
+    <select id="findFhundredNum" resultType="int">
+        select sum(o.buynum) from
+        products p
+        left join
+        (select buynum,product_id o_id from orderitem o)o
+        on p.product_id=o.o_id
+        where p.price between 400 and 500
+    </select>
+    <select id="findFVhundredNum" resultType="int">
+        select sum(o.buynum) from
+        products p
+        left join
+        (select buynum,product_id o_id from orderitem o)o
+        on p.product_id=o.o_id
+        where p.price between 500 and 600
+    </select>
+    <select id="findShundredNum" resultType="int">
+        select sum(o.buynum) from
+        products p
+        left join
+        (select buynum,product_id o_id from orderitem o)o
+        on p.product_id=o.o_id
+        where p.price between 600 and 700
+    </select>
+    <select id="findBhundredNum" resultType="int">
+        select sum(o.buynum) from
+        products p
+        left join
+        (select buynum,product_id o_id from orderitem o)o
+        on p.product_id=o.o_id
+        where p.price between 0 and 100
+    </select>
+</mapper>

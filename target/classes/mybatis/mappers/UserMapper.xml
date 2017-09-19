@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.mapper.UserMapper">
+
+    <select id="findAll" resultType="com.springboot.pojo.User">
+        select * from user
+    </select>
+
+    <insert id="saveUser">
+        insert into user (user_id, username, password, nickname, phonenumber, email)
+        values(
+        #{userId, jdbcType=VARCHAR},
+        #{username, jdbcType=VARCHAR},
+        #{password, jdbcType=VARCHAR},
+        #{nickname, jdbcType=VARCHAR},
+        #{phonenumber, jdbcType=VARCHAR},
+        #{email, jdbcType=VARCHAR}
+        )
+    </insert>
+
+
+    <select id="findUserByUserName" resultMap="userRM">
+        select * from user u join user_info info
+        on u.user_id=info.user_info_id
+        and u.userName=#{userName}
+    </select>
+
+    <resultMap id="userRM" type="com.springboot.pojo.User" autoMapping="true">
+        <id column="user_id" property="userId"/>
+        <association property="userInfo" resultMap="infoRM" javaType="com.springboot.pojo.UserInfo"/>
+    </resultMap>
+    <resultMap id="infoRM" type="com.springboot.pojo.UserInfo" autoMapping="true">
+        <id column="user_info_id" property="userInfoId"></id>
+    </resultMap>
+
+    <update id="updateUser">
+        UPDATE user set username=#{username},password=#{password},nickname=#{nickname},phonenumber=#{phonenumber},email=#{email}
+        WHERE user_id=#{userId}
+    </update>
+
+
+
+    <!--后台开始-->
+    <select id="findAllUser" resultMap="userRM">
+        select u.user_id,u.username,u.password,u.nickname,u.phonenumber,u.email,info.name,info.card_no,info.join_date,info.gender,info.birthday,info.statment,info.user_level,info.remark from
+        user u
+        left join
+        user_info info
+        on u.user_id=info.user_info_id
+        order by u.user_id
+    </select>
+
+    <select id="findUserByPageNum" resultMap="userRM">
+        select u.user_id,u.username,u.password,u.nickname,u.phonenumber,u.email,info.name,info.card_no,info.join_date,info.gender,info.birthday,info.statment,info.user_level,info.remark from
+        user u
+        left join
+        user_info info
+        on u.user_id=info.user_info_id
+        order by u.user_id
+        limit #{pageNum},#{everyPage}
+
+    </select>
+
+    <select id="findAllManUser" resultType="int">
+        select count(*) from
+        user u
+        left join
+        user_info info
+        on u.user_id=info.user_info_id
+        where info.gender = '男'
+
+    </select>
+
+
+    <select id="findAllWomenUser" resultType="int">
+        select count(*) from
+        user u
+        left join
+        user_info info
+        on u.user_id=info.user_info_id
+        where info.gender = '女'
+
+    </select>
+
+    <select id="findAllUndifidUser" resultType="int">
+        select count(*) from
+        user u
+        left join
+        user_info info
+        on u.user_id=info.user_info_id
+        where info.gender not in ('男','女')
+
+    </select>
+
+    <!--查询月度销量-->
+    <select id="findMonthSale" resultType="int">
+        select sum(buynum) from
+        orders o LEFT JOIN orderitem oi
+        on o.order_id = oi.order_id
+        where o.ordertime &gt; #{date1} and o.ordertime &lt; #{date2}
+
+    </select>
+
+    <!--通过id查找用户-->
+    <select id="findUserById" resultMap="userRM">
+        select u.user_id,u.username,u.password,u.nickname,u.phonenumber,u.email,info.name,info.card_no,info.join_date,info.gender,info.birthday,info.statment,info.user_level,info.remark from
+        user u
+        left join
+        user_info info
+        on u.user_id=info.user_info_id
+        where u.user_id = #{userId}
+
+    </select>
+
+    <!--新增用户-->
+    <insert id="saveUserByAdmin">
+        INSERT into user(user_id,username,password,nickname,phonenumber,email)
+        values (
+        #{userId},
+        #{username},
+        #{password},
+        #{nickname},
+        #{phonenumber},
+        #{email}
+        )
+    </insert>
+
+    <!--更新用户-->
+    <update id="updateUserByUser">
+        update user SET
+        username=#{username},
+        password=#{password},
+        nickname=#{nickname},
+        phonenumber=#{phonenumber},
+        email=#{email}
+        where user_id=#{userId}
+    </update>
+
+    <!--根据id删除用户-->
+    <delete id="deleteUserByIds">
+        delete from user
+        where user_id in(
+        <foreach collection="array" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </delete>
+
+
+
+</mapper>
