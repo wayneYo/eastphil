@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="633803c3-c047-41bf-95f5-ab2d45ff7873" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/springboot/controller/BaseController.java" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/controller/BaseController.java" />
-    </list>
+    <list default="true" id="633803c3-c047-41bf-95f5-ab2d45ff7873" name="Default" comment="" />
     <ignored path="1706web.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -782,7 +780,7 @@
       <workItem from="1505731877487" duration="7029000" />
       <workItem from="1505781320234" duration="4064000" />
       <workItem from="1505785581703" duration="1410000" />
-      <workItem from="1505800512622" duration="37000" />
+      <workItem from="1505800512622" duration="644000" />
     </task>
     <task id="LOCAL-00001" summary="first">
       <created>1505220644580</created>
@@ -809,7 +807,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="160119000" />
+    <option name="totallyTimeSpent" value="160726000" />
   </component>
   <component name="TodoView" selected-index="3">
     <todo-panel id="selected-file">
