@@ -79,7 +79,7 @@ public class CheckoutController {
             writer.close();
             return null;
         }
-
+        //test222fdfd
         User user = (User) userObj;
 
         //如果订单未添加商品则跳转到购物车页面
