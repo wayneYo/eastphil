@@ -31,7 +31,7 @@ public class BackProductController {
 
     @Autowired
     private CategoryService categoryService;
-
+    //跳转至商品列表
     @RequestMapping("/product")
     public String findAllProduct(Model model) {
         List<Products> productList = productService.findAllProduct();
